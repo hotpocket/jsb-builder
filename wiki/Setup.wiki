@@ -1,7 +1,7 @@
 Provide detail on requirements to run this code.
 
 = Introduction =
-I love spket as an editor but didn't want to include every JavaScript file and order them (with respect to inheritance) correctly so i could get code complete in my js projects.  This is my implementation of auto building a JSB file that has the correct ordering and inclusion of new .js files.
+I love spket as an editor but didn't want to include every Java Script file and order them (with respect to inheritance) correctly so i could get code complete in my js projects.  This is my implementation of auto building a JSB file that has the correct ordering and inclusion of new .js files.
 
 As far as I know this should run with any version of eclipse provided a perl binary and the E.P.I.C. eclipse plugin.
 
