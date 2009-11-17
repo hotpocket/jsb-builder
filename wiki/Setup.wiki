@@ -29,5 +29,5 @@ It will generate the test.jsb2 file in the js folder.   To confirm it is generat
   # Browse to the test.jsb2 generated in the "Running the test script" section.
   # Right click on your eclipse project and click "Reload Javascript Profile"
   # Open the firstChild.js in the js folder of the project
-  # Put your cursor on the <b>MyBase</b> js object that is being extended and hit F3
+  # Put your cursor on the {{{MyBase}}} js object that is being extended and hit F3
 That's it.  This should open the base file for you.  The test.jsb2 file loaded into spket references the base.js and firstChild.js loaded in that order so dependencies are loaded in the right order.
