@@ -26,7 +26,8 @@ It will generate the test.jsb2 file in the js folder.   To confirm it is generat
   # For testing purposes click the New... button and call the new profile jsb-builder (you can call yours something more specific to your project when doing it for your js project). 
   # Select the new jsb-builder item and click the "Add Library" button.
   # Select the newly created ExtJS item under jsb-builder and click the "Add File" button.
-  # Browse to the test.jsb2 generated in the "Running the test script" section.
+  # Add the ext.jsb2 file that comes as part of the ExtJS download first
+  # Repeat step 4 and browse to the test.jsb2 generated in the "Running the test script" section.  Be sure this jsb2 file added is under the ext.jsb2 file included on step 5 or there will be dependency issues.
   # Right click on your eclipse project and click "Reload Javascript Profile"
   # Open the firstChild.js in the js folder of the project
   # Put your cursor on the {{{MyBase}}} js object that is being extended and hit F3
