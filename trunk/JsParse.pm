@@ -55,7 +55,8 @@ sub parseClasses {
     } # done parsing doc comments
     # try & parse the Ext.extend now .. to fill in the gaps where we don't have doc comments
     print "\nParsing for Ext.extend" if $debug;
-    my @extExtend = ($contents =~ m'(^.*?Ext\.extend.*?$)'gm);
+    #              childVar = (optional new line,no ; char)Ext.extend({...})
+    my @extExtend = ($contents =~ m'(^.*?=.*?(?:(?!;))\n?.*?Ext\.extend.*?$)'gm);
     for my $extended(@extExtend) {
         $extended =~ s/\s//gms;  # for some reason chomp() just wasn't doing the job
         if($extended =~ m'^\s*//' || $extended =~ m'^\s*/\*') {
