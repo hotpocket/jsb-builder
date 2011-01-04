@@ -2,6 +2,8 @@
 # 1) The jsDoc comments @class and @extends
 # 2) The Ext.extend() 2 arg version  (reffered to as type 1 in this class)
 # 3) The Ext.extend() 3 arg version  (reffered to as type 2 in this class)
+# 3) The Ext.extend() 3 arg version that also has it's return value assigned to a var (a sub block under type 1)
+
 package JsParse;
 
 use Node;
@@ -70,7 +72,14 @@ sub parseClasses {
             $extends =~ s/\s+//g; # strip whitespace
             $class =~ s/\s+//g; # strip whitespace
             $extends =~ s/Ext\.extend\(//;
-            $extends =~ s/^(.*)?,.*$/$1/;
+            my $commaCount = ($extends =~ tr/,//);
+            if($commaCount == 1){
+            	$extends =~ s/^([\w\.]+)?,.*$/$1/;
+            }elsif($commaCount == 2){
+            	$extends =~ s/^([\w\.]+)?,([\w\.]+)?,.*$/$2/;
+            }else{
+            	print "\n\nDETECTED INVALID NUM ARGS FOR AN INSTANCE OF Ext.extend()";
+            }
             print " extends '$extends'" if $debug;
         }else{
             print "\nFound extend type 2 " if $debug;
