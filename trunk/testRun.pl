@@ -16,7 +16,7 @@ use JsbDepRes;
 # file locations
 # paths generated in the .jsb are relative to $jsbRoot
 # the .jsb file should therefore always live in the jsbRoot so it references paths in the .jsb correctly
-my $jsbRoot = "/cygdrive/c/PROGRAMMER/eclipse-workspace_3.5/jsb-builder/js/";
+my $jsbRoot = "/cygdrive/c/PROGRAMMER/eclipse-workspace/jsb-builder/js/";
 my $jsbFile = $jsbRoot ."test.jsb2";
 
 # rebuild the $jsbFile

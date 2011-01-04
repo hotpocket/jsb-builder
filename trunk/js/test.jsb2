@@ -1,7 +1,7 @@
 {
   projectName: 'jsb2 includes', 
   pkgs: [{
-    file: '/cygdrive/c/PROGRAMMER/eclipse-workspace_3.5/jsb-builder/js/test.jsb2',
+    file: '/cygdrive/c/PROGRAMMER/eclipse-workspace/jsb-builder/js/test.jsb2',
     name: 'Everything', 
     fileIncludes: [{
       text: 'base.js',
