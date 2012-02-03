@@ -34,7 +34,6 @@ sub getDeps {
     my $node;
     # create class objects
     my $buildObj = new FindJs($this->{'root'});
-    
     my @jsFiles = $buildObj->getJsFiles();
     my $jsParse = new JsParse();
     
@@ -97,7 +96,10 @@ sub loadDep {
     }
     my $node = $this->{'classNodeMap'}{$class}{'node'};
     for my $dep($node->getEdges()) {
-        if(!defined $this->{'classNodeMap'}{$dep} || !defined $this->{'classNodeMap'}{$dep}{'node'} || $this->{'classNodeMap'}{$dep}{'loaded'}){  # return if already loaded
+        if(!defined $this->{'classNodeMap'}{$dep} || 
+           !defined $this->{'classNodeMap'}{$dep}{'node'} || 
+           $this->{'classNodeMap'}{$dep}{'loaded'})
+        {  # return if already loaded
             if($debug){
                 my $why;
                 if(!defined $this->{'classNodeMap'}{$dep}){ 
