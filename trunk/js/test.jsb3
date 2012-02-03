@@ -1,0 +1,21 @@
+{
+  "projectName": "jsb3 includes", 
+  "builds": [{
+    "target": "test_all.js",
+    "name": "Everything",
+    "compress": true, 
+    "files": [{
+        "name": "MyChildRequiresUses.js",
+        "path": ""
+      },{
+        "name": "base.js",
+        "path": ""
+      },{
+        "name": "MyChildRequires.js",
+        "path": ""
+      },{
+        "name": "firstChild.js",
+        "path": ""
+    }]
+  }],
+}
