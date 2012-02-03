@@ -1,4 +1,4 @@
-Ext.ux.MyBase = Ext.extend(Ext.Component,{
+Ext.define('Ext.ux.MyBase', {
     /**
      * @cfg {Boolean} someFlag
      */
@@ -8,5 +8,7 @@ Ext.ux.MyBase = Ext.extend(Ext.Component,{
      */
     ,doStuff: function() {
         // do some stuff here
+        var foo="/* a comment inside quotes */";
+        var foo2="// more comments inside quotes";
     }
 });
