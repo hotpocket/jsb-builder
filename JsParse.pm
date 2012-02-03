@@ -1,9 +1,3 @@
-# this class parses .js files for 3 different types inherritence syntax
-# 1) The jsDoc comments @class and @extends
-# 2) The Ext.extend() 2 arg version  (reffered to as type 1 in this class)
-# 3) The Ext.extend() 3 arg version  (reffered to as type 2 in this class)
-# 3) The Ext.extend() 3 arg version that also has it's return value assigned to a var (a sub block under type 1)
-
 package JsParse;
 
 use Node;
