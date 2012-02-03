@@ -26,9 +26,13 @@ my @deps = $j->getDeps();
 
 open(JSB, ">$jsbFile"); # open jsb file for overwrite
 print "Writing .jsb3:\n";
-print JSB "{\n  'projectName': 'jsb3 includes', \n  'builds': ".
-           "[{\n    'target': 'test_all_js.js',\n    'name': 'Everything',\n    'compress': true, \n    'files': ".
+my $jsbLine = "{\n  'projectName': 'jsb3 includes', \n  'builds': ".
+           "[{\n    'target': 'test_all.js',\n    'name': 'Everything',\n    'compress': true, \n    'files': ".
            "[{\n      ";
+           
+$jsbLine =~ s/'/"/g; # aparently it's invalid to use single quotes in a jsb3
+print JSB $jsbLine;
+
 my @lines = ();
 my $file = '';
 my $dir = '';
