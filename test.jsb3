@@ -16,6 +16,9 @@
       },{
         "name": "firstChild.js",
         "path": "js/"
+      },{
+        "name": "main.js",
+        "path": "js/"
     }]
   }],
 }
