@@ -21,6 +21,7 @@ my $jsbFile = $jsRoot ."/test.jsb3";
 print "Calculating Dependencies...\n";
 my $j = new JsbDepRes($jsRoot);
 $j->addPath("js");
+$j->procLast("js/main.js");
 my @deps = $j->getDeps();
 
 open(JSB, ">$jsbFile"); # open jsb file for overwrite

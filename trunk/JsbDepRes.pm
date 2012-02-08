@@ -23,11 +23,18 @@ sub new {
     $root =~ s/\/+$//g;
     $this->{'root'} = $root;
     $this->{'paths'} = ();
+    $this->{'procLast'} = {};
     $this->{'cirCheck'} = {};  # stores classes names that are in the processing of being resolved to avoid circular reference issues
     $this->{'classNodeMap'} = {};
     $this->{'depOrder'} = []; 
     bless($this, $type);
     return($this);   
+}
+
+sub procLast {
+    my $this = $_[0];
+    my $path = $_[1];
+    $this->{'procLast'}{$path} = 1;
 }
 
 sub addPath {
@@ -98,8 +105,18 @@ sub getDeps {
     my %uniq;
     for my $dep(@{$this->{'depOrder'}}) {
         if(defined $uniq{$dep}){ next; }
+        if(defined $this->{'procLast'}{$dep}){
+            $this->{'procLast'}{$dep} = 2;
+            next;
+        }
         push(@uniqDep,$dep);
         $uniq{$dep} = 1;
+    }
+    for my $tail(keys %{$this->{'procLast'}}){
+        if($this->{'procLast'}{$tail} == 2){
+            print "\nLast Processing: $tail\n" if $debug;
+            push(@uniqDep,$tail);
+        }
     }
     return @uniqDep;
     #return @{$this->{'depOrder'}};
