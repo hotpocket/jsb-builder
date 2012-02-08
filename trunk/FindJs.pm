@@ -12,7 +12,7 @@ sub new {
 }
 
 # Recurse into all folders under root to find only .js files
-# hard coded skipping of any content in any .svn folders
+# hard coded skipping of any content in any . (hidden) folders
 sub getJs
 {
     my $this = $_[0];
@@ -29,8 +29,8 @@ sub getJs
         my($path) = "$dirname/$name";
         if( -d $path ){ # it's a folder
             if(($name ne "..") && ($name ne ".")) {
-                if($path !~ /\.svn/) {   # hard code: filter out .svn folders
-                $this->getJs($path);     # recurse
+                if($path !~ /\/\./) {       # hard code: filter out hidden folders based on a /. pattern
+                    $this->getJs($path);    # recurse
                 }
             }
         }
