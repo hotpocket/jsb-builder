@@ -20,7 +20,9 @@ sub new {
     my($this) = {};
     my $root = $_[1];
     # some vars to keep track of what is already loaded
+    $root =~ s/\/+$//g;
     $this->{'root'} = $root;
+    $this->{'paths'} = ();
     $this->{'cirCheck'} = {};  # stores classes names that are in the processing of being resolved to avoid circular reference issues
     $this->{'classNodeMap'} = {};
     $this->{'depOrder'} = []; 
@@ -28,19 +30,32 @@ sub new {
     return($this);   
 }
 
+sub addPath {
+    my $this = $_[0];
+    my $path = $_[1];
+    push(@{$this->{'paths'}},$path);
+}
+
 sub getDeps {
     my $this = $_[0];
     my @nodes;
     my $node;
-    # create class objects
-    my $buildObj = new FindJs($this->{'root'});
-    my @jsFiles = $buildObj->getJsFiles();
-    my $jsParse = new JsParse();
     
+    my @jsFiles = ();
+    my $findJs;
+    # create class objects
+    for my $path(@{$this->{'paths'}}){
+        $findJs = new FindJs($this->{'root'}."/$path");
+        for my $jsFile($findJs->getJsFiles()){
+            push(@jsFiles,"$path/$jsFile");
+        }
+    }
+
+    my $jsParse = new JsParse();
     print "\nReading js files " if $debug;
     for my $jsFile (@jsFiles) {
         print "." if $debug;
-        if($node = $jsParse->parseClasses($this->{'root'}.$jsFile)) {
+        if($node = $jsParse->parseClasses($this->{'root'}."/$jsFile")) {
             print "+" if $debug;
             push(@nodes,$node);
         };
@@ -63,9 +78,11 @@ sub getDeps {
         $this->loadDep($item);
     }
     
-    print "\nLoad order is: " if $debug;
-    for my $d (@{$this->{'depOrder'}}) {
-        print "\n$d" if $debug;
+    if($debug) {
+        print "\nLoad order is: ";
+        for my $d (@{$this->{'depOrder'}}){
+            print "\n$d";
+        }
     }
     
     for my $n (@nodes){
@@ -137,12 +154,3 @@ sub loadDep {
 }
 
 return(1);
-
-
-
-
-
-
-
-
-
