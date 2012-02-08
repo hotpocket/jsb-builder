@@ -22,7 +22,7 @@ sub getName {
     my($relative) = $_[1];
     my $name = $this->{'name'};
     if(defined $relative) {
-        $name =~ s/$relative//;
+        $name =~ s/$relative\/+//;
     }
     return $name;
 }
@@ -33,9 +33,6 @@ sub getClasses {
     if(!defined $this->{'classes'}){
         $return = ();
     }else{
-        if(scalar($this->{'classes'}) > 1){
-            print "\n". scalar($this->{'classes'}) ." classes found in getClasses" if $debug;
-        }
         $return = $this->{'classes'};
     }
     print "\nreturning $return from getClasses" if $debug;
