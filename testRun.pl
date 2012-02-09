@@ -24,27 +24,37 @@ $j->addPath("js");
 $j->procLast("js/main.js");
 my @deps = $j->getDeps();
 
-open(JSB, ">$jsbFile"); # open jsb file for overwrite
-print "\nWriting .jsb3:\n";
-my $jsbLine = "{\n  'projectName': 'jsb3 includes', \n  'builds': ".
-           "[{\n    'target': 'test_all.js',\n    'name': 'Everything',\n    'compress': true, \n    'files': ".
-           "[{\n      ";
-           
-$jsbLine =~ s/'/"/g; # aparently it's invalid to use single quotes in a jsb3
-print JSB $jsbLine;
+## Construction of the .jsb3 file is the job of this script, there is no seperate script for that
+## Proceed to populate the template with our resolved dependencies
+
+# read template
+open(FILE, "<jsb3_template.txt") or die "Can't open jsb3_template.txt";
+local $/ = undef;
+my $template = <FILE>;
+close(FILE);
+
+# adjust spacer relative to the contents of the tempalte file
+my $tab = "            ";
+my $filesBlock = '"files": [{';
 
 my @lines = ();
-my $file = '';
-my $dir = '';
+my ($file, $dir, $jsbLine);
 for my $dep(@deps) {
     $dep =~ m/((.*)[\\\/])?(.+)/;
     ($dir,$file) =  ( $1 || '', $3 || '' );
-    my $jsbLine = "  'name': '$file',\n        'path': '$dir'";
+    $jsbLine = "\n$tab    'name': '$file',\n$tab    'path': '$dir'";
+    # .jsb3 files may not contain any ' chars
     $jsbLine =~ s/'/"/g;
     push(@lines, $jsbLine);
 }
-my $data = join("\n      },{\n      ",@lines);
-print JSB "$data\n    }]\n  }],\n}";
+$filesBlock .= join("\n$tab},{",@lines);
+$filesBlock .= "\n$tab}]";
+
+$template =~ s/%%files_block%%/$filesBlock/;
+
+open(JSB, ">$jsbFile"); # open jsb file for overwrite
+print "\nWriting .jsb3:\n";
+print JSB $template;
 close(JSB);
 
 print "Done.\n";

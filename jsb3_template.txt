@@ -6,22 +6,7 @@
             "name": "Everything Package",
             "target": "everything-package.js",
             "id": "everything_package_id",
-            "files": [{
-                "name": "MyChildRequiresUses.js",
-                "path": "js/"
-            },{
-                "name": "base.js",
-                "path": "js/"
-            },{
-                "name": "MyChildRequires.js",
-                "path": "js/"
-            },{
-                "name": "firstChild.js",
-                "path": "js/"
-            },{
-                "name": "main.js",
-                "path": "js/"
-            }]
+            %%files_block%%
         }
     ],
     "builds": [
