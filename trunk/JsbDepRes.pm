@@ -152,6 +152,7 @@ sub loadDep {
         if(defined $this->{'cirCheck'}{$dep}){ next; } # skip further processing circular references
         $this->{'cirCheck'}{$dep} = $class;
         if($this->{'classNodeMap'}{$dep}{loaded}){ next; }
+        no warnings 'recursion'; # there may be lots and lots of dependencies to resolve...
         $this->loadDep($dep);
         $this->{'cirCheck'}{$dep} = undef;        #dep loaded, remove it from cirCheck
         if(defined $this->{'classNodeMap'}{$dep} && !$this->{'classNodeMap'}{$dep}{loaded}) {  # dep in our lib, & all it's deps resolved
