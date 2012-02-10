@@ -9,6 +9,7 @@ use strict;
 use warnings;
 use JavaScript::Minifier qw(minify);
 
+
 my $debug = 0;
 # recursive regex to find matching parens of Ext.define()
 # so it's contents can be extracted & parsed
@@ -40,10 +41,10 @@ sub defineParse {
   while($i < $slen){
     my $ch = substr($str,$i,1);
   
-    # check for regex, skip quotes inside of a regex
-    if($ch eq "/" and $in eq ''){
+    # check for regex, skip quotes and strip () inside of a regex
+    if($ch eq "/"){
       my $lastCh = substr($str, $i-1,1);
-      if($lastCh eq "=" or $lastCh eq "(") {
+      if($lastCh eq "=" or $lastCh eq "(" or $lastCh eq ":" or $lastCh eq ",") {
           # re found, strip () chars until end of re is reached
           push(@result,$ch);
           my $j = 1;
@@ -58,20 +59,22 @@ sub defineParse {
           next;
       }
     }
-    if($ch eq '"' or $ch eq "'"){
-      if($in eq ''){ # start of string
-        $in = $ch;
-      }else{    # end of string if $ch eq $in
-        if($ch eq $in){
-          $in = '';
+    # check for strings, strip () and ""Ext.define" out of them
+    if($ch =~ /['"]/){
+        # string found, strip () chars and any "Ext.define" strings until end of string is reached
+        push(@result,$ch);
+        my $j = 1;
+        while(substr($str, $i+$j, 1) ne $ch) {
+          $j = $j+1 while(substr($str, $i+$j, 1) ne $ch);
         }
-      }
+        my $string = substr($str, $i+1, $i+$j -$i);
+        $string =~ s/[()]//g;
+        $string =~ s/Ext\.define//g;
+        $i = $i+$j+1;
+        push(@result,$string);
+        next;
     }
-    if($in ne '' and ($ch eq '(' or $ch eq ')')){
-      #print "\nSkipping $ch at $i" if $debug;
-    }else{
-      push(@result,$ch);
-    }
+    push(@result,$ch);
     $i++;
   }
   $str = join('',@result);
@@ -178,4 +181,3 @@ sub parseClasses {
 }
 
 return(1); # gotta do this or it's not a package
-
