@@ -122,15 +122,89 @@ sub defineParse {
              print "$reqDep\n\t\t   " if $debug;
          }
      }
-     # uses: [list] || 'string'
-     if($block =~ m/uses:\[['"](.*?)['"]\]/ || $block =~ m/uses:['"](.*?)['"]/){
+     
+     # uses: [list] and 'string' cases are not parsed for dependencies here because 
+     # they are use/runtime requirements not eval/compile time requirements
+     
+     # mixins: [list]
+     if($block =~ m/mixins:\[['"](.*?)['"]\]/){
          $deps->{$class} = $deps->{$class} || {};
-         my $uses = $1; 
-         print "\n(uses)\t\t-> " if $debug;
-         my @useDeps = split(/['"],['"]/,$uses);
-         for my $useDep (@useDeps){
-             $deps->{$class}{$useDep} = 1;
-             print "$useDep\n\t\t   " if $debug;
+         my $mixins = $1;
+         print "\n(mixins_l)\t\t-> " if $debug;
+         my @mixDeps = split(/['"],['"]/,$mixins);
+         for my $mixDep (@mixDeps){
+             $deps->{$class}{$mixDep} = 1;
+             print "$mixDep\n\t\t   " if $debug;
+         }
+     }
+     # mixins: {obj}  -- obj parsing is very dissimilar from list parsing thus done in a seperate block
+     if($block =~ m/mixins:\{(.*?)\}/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $mixins = $1;
+         print "\n$mixins\n" if $debug;
+         print "\n(mixins_o)\t\t-> " if $debug;
+         my @mixProps = split(',',$mixins);
+         # strip name from name:value, then strip quotes from value, then push onto deps
+         for my $mixProp (@mixProps){
+             $mixProp =~ s/['"]?.*['"]?://;
+             $mixProp =~ s/['"]//g;
+             $deps->{$class}{$mixProp} = 1;
+             print "$mixProp\n\t\t   " if $debug;
+         }
+     }     
+     # model: 'string'
+     if($block =~ m/model:['"](.*?)['"]/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $model = $1; 
+         print "\n(model)\t\t-> " if $debug;
+         my @modelDeps = split(/['"],['"]/,$model);
+         for my $modelDep (@modelDeps){
+             $deps->{$class}{$modelDep} = 1;
+             print "$modelDep\n\t\t   " if $debug;
+         }
+     }
+     # models: [list]
+     if($block =~ m/models:\[['"](.*?)['"]\]/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $model = $1; 
+         print "\n(models)\t\t-> " if $debug;
+         my @modelDeps = split(/['"],['"]/,$model);
+         for my $modelDep (@modelDeps){
+             $deps->{$class}{$modelDep} = 1;
+             print "$modelDep\n\t\t   " if $debug;
+         }
+     }
+     # controllers: [list]
+     if($block =~ m/controllers:\[['"](.*?)['"]\]/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $controllers = $1; 
+         print "\n(controllers)\t\t-> " if $debug;
+         my @controllerDeps = split(/['"],['"]/,$controllers);
+         for my $controllerDep (@controllerDeps){
+             $deps->{$class}{$controllerDep} = 1;
+             print "$controllerDep\n\t\t   " if $debug;
+         }
+     }
+     # stores: [list]
+     if($block =~ m/stores:\[['"](.*?)['"]\]/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $stores = $1; 
+         print "\n(stores)\t\t-> " if $debug;
+         my @storeDeps = split(/['"],['"]/,$stores);
+         for my $storeDep (@storeDeps){
+             $deps->{$class}{$storeDep} = 1;
+             print "$storeDep\n\t\t   " if $debug;
+         }
+     }
+     # views: [list]
+     if($block =~ m/views:\[['"](.*?)['"]\]/){
+         $deps->{$class} = $deps->{$class} || {};
+         my $views = $1; 
+         print "\n(views)\t\t-> " if $debug;
+         my @viewDeps = split(/['"],['"]/,$views);
+         for my $viewDep (@viewDeps){
+             $deps->{$class}{$viewDep} = 1;
+             print "$viewDep\n\t\t   " if $debug;
          }
      }
   }
@@ -143,6 +217,7 @@ my $dotCount = 0;
 sub parseClasses {
     my $this = $_[0];
     my $file = $_[1];
+    #print "$file\n";
     print ".";
     $dotCount++;
     if($dotCount % 80 eq 0){ $dotCount =0;print "\n";}
@@ -181,3 +256,4 @@ sub parseClasses {
 }
 
 return(1); # gotta do this or it's not a package
+
